@@ -45,7 +45,9 @@
               zoom: 8
             },
             map = new google.maps.Map($('#map-canvas')[0], mapOptions),
-            infowindows = [];
+            infowindows = [],
+            frackingMarkers = [],
+            earthquakeMarkers = [];
 
         $.each(frackingData.posts, function (i, frackingSite) {
           var pos = frackingSite.custom_fields.fo_acf_loc_gmap_info,
@@ -67,6 +69,7 @@
               });
 
           infowindows.push(infowindow);
+          frackingMarkers.push(marker);
 
           google.maps.event.addListener(marker, 'click', function () {
             $.each(infowindows, function (i, infowindow) {
@@ -97,6 +100,7 @@
               });
 
           infowindows.push(infowindow);
+          earthquakeMarkers.push(marker);
 
           google.maps.event.addListener(marker, 'click', function () {
             $.each(infowindows, function (i, infowindow) {

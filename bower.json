@@ -1,0 +1,21 @@
+{
+  "name": "fracking-earthquakes",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ahmednuaman/fracking-earthquakes",
+  "authors": [
+    "Ahmed Nuaman <ahmed@ahmednuaman.com>"
+  ],
+  "description": "A map that plots fracking sites and earthquakes in the UK",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}

@@ -52,10 +52,48 @@
               marker = new google.maps.Marker({
                   position: new google.maps.LatLng(pos.lat, pos.lng),
                   map: map,
-                  title: frackingSite.title
+                  title: frackingSite.title,
+                  icon: {
+                    url: 'assets/img/fracking-site.png',
+                    size: new google.maps.Size(100, 100),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(12, 25),
+                    scaledSize: new google.maps.Size(50, 50)
+                  }
               }),
               infowindow = new google.maps.InfoWindow({
-                content: frackingSite.excerpt
+                content: frackingSite.excerpt,
+                pixelOffset: new google.maps.Size(-25, 0)
+              });
+
+          infowindows.push(infowindow);
+
+          google.maps.event.addListener(marker, 'click', function () {
+            $.each(infowindows, function (i, infowindow) {
+              infowindow.close();
+            });
+
+            infowindow.open(map, marker);
+          });
+        });
+
+        $.each(earthquakeData.responseData.feed.entries, function (i, earthquake) {
+          var pos = earthquake.content.match(/Lat\/long: ([-\d\.]+),([-\d\.]+)/),
+              marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(pos[1], pos[2]),
+                  map: map,
+                  title: earthquake.title,
+                  icon: {
+                    url: 'assets/img/earthquake.png',
+                    size: new google.maps.Size(98, 100),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(12, 25),
+                    scaledSize: new google.maps.Size(49, 50)
+                  }
+              }),
+              infowindow = new google.maps.InfoWindow({
+                content: earthquake.content,
+                pixelOffset: new google.maps.Size(-25, 0)
               });
 
           infowindows.push(infowindow);

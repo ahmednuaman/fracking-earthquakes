@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html, 
+      body, 
+      #map-canvas,
+      #loader { 
+        height: 100%; 
+        margin: 0; 
+        padding: 0;
+        width: 100%;
+      }
+
+      #loader {
+        background: url(http://jxnblk.com/loading/loading-bubbles.svg) no-repeat center #ddd;
+        background-size: 100px;
+        position: absolute;
+      }
+    </style>
+    <title>Fracking Earthquakes</title>
+  </head>
+  <body>
+    <div id="loader"></div>
+    <div id="map-canvas"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYWzFXZziDZzTSBmL3Ptq8yaYzZtK0-AQ"></script>
+    <script>
+      function init () {
+        $.getJSON('http://www.ahmednuaman.com/_/dev/fracking-earthquakes/?callback=?')
+          .success(function (frackingData) {
+            $.getJSON('http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&q=http://www.bgs.ac.uk/feeds/MhSeismology.xml&callback=?')
+              .success(function (earthquakeData) {
+                loadMap(frackingData, earthquakeData);
+              });
+          });
+      }
+
+      function loadMap (frackingData, earthquakeData) {
+        var mapOptions = {
+              center: { 
+                lat: 52, 
+                lng: 0
+              },
+              zoom: 8
+            },
+            map = new google.maps.Map($('#map-canvas')[0], mapOptions),
+            infowindows = [];
+
+        $.each(frackingData.posts, function (i, frackingSite) {
+          var pos = frackingSite.custom_fields.fo_acf_loc_gmap_info,
+              marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(pos.lat, pos.lng),
+                  map: map,
+                  title: frackingSite.title
+              }),
+              infowindow = new google.maps.InfoWindow({
+                content: frackingSite.excerpt
+              });
+
+          infowindows.push(infowindow);
+
+          google.maps.event.addListener(marker, 'click', function () {
+            $.each(infowindows, function (i, infowindow) {
+              infowindow.close();
+            });
+
+            infowindow.open(map, marker);
+          });
+        });
+      }
+
+      google.maps.event.addDomListener(window, 'load', init);
+    </script>
+  </body>
+</html>
